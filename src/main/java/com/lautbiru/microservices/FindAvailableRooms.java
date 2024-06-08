@@ -1,19 +1,16 @@
 package com.lautbiru.microservices;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lautbiru.controller.GuestController;
 import com.lautbiru.model.GuestModel;
 import com.lautbiru.utils.CommonUtils;
 import com.lautbiru.utils.DateUtils;
-import com.lautbiru.validator.JSONValidator;
 import com.sun.net.httpserver.HttpExchange;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,22 +34,10 @@ public class FindAvailableRooms extends CommonUtils {
             String query = httpExchange.getRequestURI().getQuery();
             if(query == null){
                 InputStream requestBody = httpExchange.getRequestBody();
-//                byte [] data = httpExchange.getRequestBody().readAllBytes();
-                byte [] data = requestBody.readAllBytes();
+                DateToBook dateToBook = objectMapper.readValue(requestBody, DateToBook.class);
 
-//                boolean validJsonBuffered = isValidJson(data);
-                boolean validJsonBuffered = JSONValidator.validate(data);
-//                boolean validJsonBuffered = isValidJsonWithoutBuffered(requestBody);
-                System.out.println("Validation Instream -> "+validJsonBuffered);
-                if(validJsonBuffered) {
-                    requestBody.reset();
-                    DateToBook dateToBook = objectMapper.readValue(requestBody, DateToBook.class);
-
-                    if(StringUtils.isNotBlank(dateToBook.selectedDate)) {
-                        response = getAvailableRooms(dateToBook.selectedDate);
-                    }
-                } else {
-                    response = "Invalid Json format. Please review format pattern";
+                if(StringUtils.isNotBlank(dateToBook.selectedDate)) {
+                    response = getAvailableRooms(dateToBook.selectedDate);
                 }
             } else {
                 String[] querySplit = query.split("=");
@@ -92,45 +77,6 @@ public class FindAvailableRooms extends CommonUtils {
             return false;
         }
     }
-
-//    public static boolean isValidJsonBuffered(InputStream inputStream) {
-//
-//        if(!inputStream.markSupported()) {
-//            inputStream = new BufferedInputStream(inputStream);
-//        }
-////        inputStream.mark(Integer.MAX_VALUE);
-//        try {
-//            objectMapper.readTree(inputStream);
-//            System.out.println("No return exception");
-//            inputStream.reset();
-//            return true;
-//        } catch (JsonMappingException e) {
-//            return false;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-
-//    public static boolean isValidJsonWithoutBuffered(InputStream inputStream) {
-//
-////        if(!inputStream.markSupported()) {
-////            inputStream = new BufferedInputStream(inputStream);
-////        }
-////        inputStream = new BufferedInputStream(inputStream);
-////        inputStream.mark(Integer.MAX_VALUE);
-//        try {
-//            JsonNode jsonNode = objectMapper.readTree(inputStream);
-//            System.out.println("No return exception");
-////            inputStream.reset();
-//            return true;
-//        } catch (JsonMappingException e) {
-//            return false;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
 
     public String getAvailableRooms(String bookingDate) {
         logger.info("Inside Get Available Rooms ");

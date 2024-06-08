@@ -127,27 +127,6 @@ class FindAvailableRoomsTest {
         assertEquals(expected, outputStream.toString());
     }
 
-    @Test
-    public void testDateEmpty() throws IOException {
-        FindAvailableRooms availableRooms = new FindAvailableRooms();
-        String requestBody = "{\"selectedDate\":}";
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(requestBody.getBytes());
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        HttpExchange exchange = mock(HttpExchange.class);
-        when(exchange.getRequestMethod()).thenReturn("GET");
-
-        URI testUri = URI.create("http://localhost:9192/GetAvailableRooms");
-        when(exchange.getRequestURI()).thenReturn(testUri);
-        when(exchange.getRequestBody()).thenReturn(inputStream);
-        when(exchange.getResponseBody()).thenReturn(outputStream);
-
-        availableRooms.copyHandle(exchange);
-
-        String expectedResponse = "Invalid Json format. Please review format pattern";
-        assertEquals(expectedResponse, outputStream.toString());
-    }
-
     public void addHotelGuest() {
         GuestController.guestModels = new HashMap<>();
         createMockGuestModels(GuestController.guestModels, "BIrT4e0K", "Najib Assadok", 2, "2024-07-25");
