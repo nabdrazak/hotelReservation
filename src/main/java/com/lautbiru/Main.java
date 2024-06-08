@@ -1,6 +1,5 @@
 package com.lautbiru;
 
-import com.lautbiru.microservices.DataHandler;
 import com.lautbiru.microservices.FindAvailableRooms;
 import com.lautbiru.microservices.GuestRegistration;
 import com.lautbiru.microservices.RetrieveAllGuests;
@@ -21,7 +20,6 @@ public class Main {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(9192), 0);
             server.createContext("/registerGuest", new MainServices());
-            server.createContext("/data", new DataHandler());
             server.createContext("/retrieveGuestDetailsById", new MainServices());
             server.createContext("/GetAvailableRooms", new MainServices());
             server.createContext("/retrieveAllGuests", new MainServices());
