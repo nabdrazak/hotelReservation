@@ -15,8 +15,4 @@ public class DateUtils {
             return null;
         }
     }
-
-//    public static Date testDate() {
-//
-//    }
 }

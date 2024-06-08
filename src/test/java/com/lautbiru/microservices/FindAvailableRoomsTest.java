@@ -23,10 +23,7 @@ class FindAvailableRoomsTest {
     @Test
     public void testHandleMethod() throws IOException {
         FindAvailableRooms findAvailableRooms = new FindAvailableRooms();
-//        String requestBody = "{\n"+" \"selectedDate\":\"2024-07-25\"}";
-        String requestBody = "{\n" +
-                "    \"selectedDate\":\"2024-07-25\"\n" +
-                "}";
+        String requestBody = "{\n"+" \"selectedDate\":\"2024-07-25\"}";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(requestBody.getBytes());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
